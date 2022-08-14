@@ -1,0 +1,33 @@
+name: habithon-server
+services:
+  api:
+    image: node:latest
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - PGUSER=admin
+      - PGHOST=db
+      - PGPASSWORD=admin-password
+      - PGDATABASE=records
+      - PGPORT=5432
+      - SECRET_PASSWORD=${PASS}
+    volumes:
+      - type: bind
+        source: ./api
+        target: /api
+    working_dir: /api
+    command: bash -c "npm install && npm run start"
+    depends_on:
+      - db
+  db:
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=records
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin-password
+    volumes:
+      - habithonDB:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d:ro
+volumes:
+  habithonDB:
