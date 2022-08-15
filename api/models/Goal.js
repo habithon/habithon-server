@@ -65,7 +65,7 @@ module.exports = class Goal {
         ]);
         resolve("Habit was deleted");
       } catch (err) {
-        reject("habit could not be deleted");
+        reject("Habit could not be deleted");
       }
     });
   }
