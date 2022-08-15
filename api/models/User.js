@@ -14,7 +14,7 @@ class User {
           `SELECT * FROM user_account WHERE username = $1;`,
           [username]
         );
-        console.log(userData.rows[0]);
+
         const user = new User(userData.rows[0]);
         resolve(user);
       } catch (err) {
