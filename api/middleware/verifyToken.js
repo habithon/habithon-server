@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 function verifyToken(req, res, next) {
-  const header = req.headers["Authorization"];
+  const header = req.headers["authorization"];
 
   if (header) {
     const token = header.split(" ")[1];
@@ -10,6 +10,7 @@ function verifyToken(req, res, next) {
       if (err) {
         res.status(401).json({ success: false, message: "Invalid token" });
       } else {
+        req.body.token = token;
         next();
       }
     });
