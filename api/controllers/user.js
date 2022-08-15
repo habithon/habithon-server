@@ -43,6 +43,27 @@ async function login(req, res) {
   }
 }
 
+async function register(req, res) {
+  try {
+    const username = req.body.username;
+    const password = req.body.password;
+
+    const hash = await bcrypt.hash(password, 12);
+    const newUser = await User.registerUser(username, hash);
+    res.status(201).json({
+      success: true,
+      body: newUser,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      error: "Unable to create user.",
+    });
+  }
+}
+
 module.exports = {
   login,
+  register,
 };
