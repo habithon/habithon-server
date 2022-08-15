@@ -1,41 +1,40 @@
-# Habithon
+# Habithon Server
 
 ## Installation & Usage
 
 ### Installation
 
 - Clone or download the repo.
-- Open terminal and navigate to `fizzbuzz` folder.
-- Run `npm install` to install dependencies.
+- Open terminal and navigate to `api` folder.
+- Run `npm install` to install dependencies and devDependencies.
 
 ### Usage
 
-- Run `npm start` to launch server.
-- Run `npm test` to launch test suite.
+- Run `bash ./scripts/startDev.sh` to start server in the docker container.
+- Run `bash ./scripts/startTest.sh` to launch test suite in the docker container.
 
 ## Changelog
 
-### index.html
-
-[x] Fixed filepath to correctly connect CSS to HTML file.
-
 ### server.js
 
-[x] Updated `fizzbuzz` function to accept an argument.
+- [x] Created files in the MVC structure.
+- [x] Created docker compose file and scripts.
+- [x] Connected functions with the database.
+- [x] Add middleware to verify tokens with hash.
 
 ## Bugs
 
-[] Function logs 15 as `fizz` when it should log `fizzbuzz`
+- [] Create and run tests with in the compose file.
 
 ## Wins & Challenges
 
 ### Wins
 
-- Managed to implement a loop.
-- Learned how to use modulus operator.
+- Managed to decode username with the respectively bearer token.
+- Learned how to create database that returns the current date with the functions `NOW()` in PostgreSQL.
 
 ### Challenges
 
-- Realised using return would not log all numbers up to the argument number.
+- Change the compose file to run tests in the docker container.
 
 ## Future Features
