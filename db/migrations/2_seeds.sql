@@ -1,8 +1,7 @@
 INSERT INTO user_account (username, password)
-VALUES (
-    'ladybird', '$2a$12$5QAvn3Hp/949tnXHWg/zBuxmHkWaSUm0r9C6gooCUxdx4s9ZxTo1K'
-    'lordbird', '$2a$12$5QAvn3Hp/949tnXHWg/zBuxmHkWaSUm0r9C6gooCUxdx4s9ZxTo1K'
-);
+VALUES 
+    ('ladybird', '$2a$12$5QAvn3Hp/949tnXHWg/zBuxmHkWaSUm0r9C6gooCUxdx4s9ZxTo1K'),
+    ('lordbird', '$2a$12$5QAvn3Hp/949tnXHWg/zBuxmHkWaSUm0r9C6gooCUxdx4s9ZxTo1K');
 
 INSERT INTO habit (user_id, habit, streak, frequency, last_completed)
 VALUES
