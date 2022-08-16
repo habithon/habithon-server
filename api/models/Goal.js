@@ -14,7 +14,7 @@ module.exports = class Goal {
     return new Promise(async (resolve, reject) => {
       try {
         const userData = await db.query(
-          `SELECT * FROM habit WHERE user_id = $1;`,
+          `SELECT *, NOW() as today FROM habit WHERE user_id = $1;`,
           [user_id]
         );
 

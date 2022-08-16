@@ -21,7 +21,6 @@ async function login(req, res) {
     const password = req.body.password;
 
     const user = await User.getOneByUsername(username);
-    console.log(user);
 
     // Check here if the password matches the hash
     const authenticated = await bcrypt.compare(password, user.password);
@@ -59,7 +58,7 @@ async function register(req, res) {
     console.log(e);
     res.status(500).json({
       success: false,
-      error: "Unable to create user.",
+      error: e,
     });
   }
 }
