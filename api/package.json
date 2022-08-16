@@ -4,7 +4,7 @@
   "description": "LAP 2 project",
   "scripts": {
     "start": "nodemon -L index.js",
-    "test": "jest --setupFiles ./tests/integration/config.js --watchAll --verbose",
+    "test": "jest --setupFiles ./tests/integration/config.js --watchAll --verbose --detectOpenHandles --coverage",
     "unitTests": "jest --testPathPattern=/unit/ --watchAll --verbose",
     "coverage": "jest --testPathPattern=/unit/ --coverage"
   },
