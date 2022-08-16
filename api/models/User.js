@@ -43,7 +43,7 @@ class User {
           reject("User could not be created");
         }
       } else {
-        resolve("User already exists!");
+        reject("User already exists!");
       }
     });
   }

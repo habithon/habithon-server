@@ -10,20 +10,50 @@ describe("user endpoints", () => {
     );
   });
 
-  afterAll((done) => {
+  afterAll(async () => {
     console.log("Gracefully stopping test server");
-    api.close(done);
+    await api.close();
   });
 
-  it("should return a list of all authors in database", async () => {
-    const res = await request(api).post("/user/login");
+  it("Validate the user credentials", async () => {
+    const res = await request(api).post("/user/login").send({
+      username: "ladybird",
+      password: "qwerty",
+    });
     expect(res.statusCode).toEqual(200);
-    expect(res.body.length).toEqual(2);
+    expect(res.body).toHaveProperty("token");
+    expect(res.body.success).toBe(true);
   });
 
-  it("should return a list of books by a specific author", async () => {
-    const res = await request(api).post("/user/register");
-    expect(res.statusCode).toEqual(200);
-    expect(res.body.books.length).toEqual(2);
+  it("Should not return a list of all goals in database", async () => {
+    const user = await request(api).post("/user/login").send({
+      username: "ladybird",
+      password: "test",
+    });
+
+    console.log(user.body.token);
+    const res = await request(api).get("/goals");
+    expect(res.statusCode).toEqual(401);
+    expect(res.body.success).toBe(false);
+  });
+
+  it("Should create a new user", async () => {
+    const user = Math.random();
+    const res = await request(api).post("/user/register").send({
+      username: user,
+      password: "test",
+    });
+    expect(res.statusCode).toEqual(201);
+    expect(res.body).toHaveProperty("body");
+  });
+
+  it("Throw error if user already exists", async () => {
+    const res = await request(api).post("/user/register").send({
+      username: "ladybird",
+      password: "qwerty",
+    });
+    expect(res.statusCode).toEqual(500);
+    expect(res.body).toHaveProperty("error");
+    expect(res.body.success).toBe(false);
   });
 });
