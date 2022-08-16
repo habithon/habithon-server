@@ -1,0 +1,35 @@
+name: test-habithon-server
+services:
+  api:
+    container_name: test-api
+    image: node:latest
+    ports:
+      - 3000:3000
+    environment:
+      - PORT=3000
+      - PGUSER=ladybird
+      - PGHOST=db
+      - PGPASSWORD=ladybird-qwerty
+      - PGDATABASE=database
+      - PGPORT=5432
+      - SECRET_PASSWORD=${PASS}
+    volumes:
+      - type: bind
+        source: ./api
+        target: /api
+    working_dir: /api
+    depends_on:
+      - db
+    tty: true
+  db:
+    container_name: test-db
+    image: postgres:latest
+    environment:
+      - POSTGRES_DB=database
+      - POSTGRES_USER=ladybird
+      - POSTGRES_PASSWORD=ladybird-qwerty
+    volumes:
+      - testDB:/var/lib/postgresql/data
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+volumes:
+  testDB:
