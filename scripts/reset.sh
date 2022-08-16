@@ -1,1 +1,1 @@
-./scripts/teardown.sh && ./scripts/startDev.sh
+bash ./scripts/teardown.sh && bash ./scripts/startDev.sh
