@@ -1,69 +1,77 @@
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-const User = require("../models/User");
+const Goal = require("../models/Goal");
 
-async function createToken(userData) {
-  const token = await jwt.sign(
-    {
-      user_id: userData["id"],
-    },
-    process.env["SECRET_PASSWORD"],
-    { expiresIn: 60 * 60 }
-  );
-
-  return token;
-}
-
-async function login(req, res) {
+async function show(req, res) {
   try {
-    const username = req.body.username;
-    const password = req.body.password;
+    const userData = await jwt.decode(req.body.token);
 
-    const user = await User.getOneByUsername(username);
+    const habits = await Goal.showHabits(userData.user_id);
 
-    // Check here if the password matches the hash
-    const authenticated = await bcrypt.compare(password, user.password);
-
-    if (authenticated) {
-      res.json({
-        success: true,
-        token: "Bearer " + (await createToken(user)),
-      });
-    } else {
-      throw "Credentials didn't match.";
-    }
-  } catch (err) {
-    console.log(err);
-
-    res.status(401).json({
-      success: false,
-      error: "Unable to authenticate user.",
-    });
-  }
-}
-
-async function register(req, res) {
-  try {
-    const username = req.body.username;
-    const password = req.body.password;
-
-    const hash = await bcrypt.hash(password, 12);
-    const newUser = await User.registerUser(username, hash);
-    res.status(201).json({
+    res.status(200).json({
       success: true,
-      body: newUser,
+      habits: habits,
     });
-  } catch (e) {
-    console.log(e);
+  } catch (err) {
     res.status(500).json({
       success: false,
-      error: e,
+      error: err,
     });
   }
 }
 
-module.exports = {
-  login,
-  register,
+async function index(req, res) {
+  try {
+    const habit = await Goal.showOne(req.params.id);
+
+    res.status(200).json({
+      success: true,
+      habit: habit,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      error: err,
+    });
+  }
+}
+async function create(req, res) {
+  try {
+    const userData = await jwt.decode(req.body.token);
+    req.body.user_id = userData.user_id;
+    const habit = await Goal.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      habit: habit,
+    });
+  } catch (err) {
+    res.status(422).json({
+      success: false,
+      error: err,
+    });
+  }
+}
+
+const update = async (req, res) => {
+  try {
+    const goal = await Goal.showOne(req.params.id);
+    const update = await goal.update(goal.id, req.body.streak);
+    res.status(201).send({ body: update, message: "updated" });
+  } catch (e) {
+    res.status(404).send({ message: "id not found" });
+  }
 };
+
+async function destroy(req, res) {
+  try {
+    const habit = await Goal.showOne(req.params.id);
+    await habit.destroy();
+
+    res.status(204).end();
+  } catch (err) {
+    res.status(404).json({ err });
+  }
+}
+
+module.exports = { show, index, create, update, destroy };
